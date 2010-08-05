@@ -1,9 +1,24 @@
+/* 
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//  Elad Elrom (elad@elromdesign.com)
+//  Copyright 2010 Elorm LLC,
+//  All Rights Reserved.
+//
+//  NOTICE: Elad Elrom permits you to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
+//
+////////////////////////////////////////////////////////////////////////////////
+
+*/
 package com.elad.framework.utils.fxgconverter
 {
 	import flash.utils.getQualifiedClassName;
 	
 	import mx.graphics.GradientEntry;
 	import mx.graphics.LinearGradient;
+	import mx.graphics.RadialGradient;
 	import mx.graphics.SolidColor;
 	import mx.graphics.SolidColorStroke;
 	import mx.utils.StringUtil;
@@ -83,8 +98,8 @@ package com.elad.framework.utils.fxgconverter
 					component = retrieveComponentFromXML( subSubComList[ii], debug );
 					
 					// Use case for gradients
-					if ( component is LinearGradient )
-						(component as LinearGradient).entries = getGradients( subComList[i].children().children().children(), debug );;
+					if ( component is LinearGradient || component is RadialGradient )
+						component.entries = getGradients( subComList[i].children().children().children(), debug );;
 					
 					addChildToComponent( component, previousComponent, debug );
 				}
@@ -171,7 +186,8 @@ package com.elad.framework.utils.fxgconverter
 				return false;
 			}
 			
-			if ( child is SolidColor || ( child is LinearGradient && previousComponent is Path ) )
+			if ( child is SolidColor || 
+					( (child is LinearGradient || child is RadialGradient) && previousComponent is Path ) )
 			{
 				previousComponent.fill = child;
 				isUIComponent = false;
