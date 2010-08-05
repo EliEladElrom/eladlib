@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
-					   xmlns:mx="library://ns.adobe.com/flex/halo"
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
 					   height="341" width="504"
 					   creationComplete="creationCompleteHandler()">	
 	
 	<fx:Script>
 		<![CDATA[
 			
-			import mx.rpc.events.ResultEvent;
-			import mx.controls.Alert;
-			import com.elad.framework.sqlite.vo.SqliteTableVO;
-			
+			import com.elad.framework.sqlite.SQLiteManager;
+			import com.elad.framework.sqlite.events.DatabaseFailEvent;
 			import com.elad.framework.sqlite.events.DatabaseSuccessEvent;
 			import com.elad.framework.sqlite.events.StatementCompleteEvent;
-			import com.elad.framework.sqlite.events.DatabaseFailEvent;
+			import com.elad.framework.sqlite.vo.SqliteTableVO;
+			
 			import mx.collections.ArrayCollection;
-			import mx.events.FlexEvent;
-			import com.elad.framework.sqlite.SQLiteManager;
+			import mx.controls.Alert;
 			
 			// SQL user gestures
 			private const READ_ALL_USERS_INFO:String = "readAllUsersInfo";

@@ -474,7 +474,10 @@ package com.elad.framework.sqlite
 		 */		
 		public function setSavepoint(name:String="", responder:Responder=null):void
 		{
-			connection.setSavepoint(name, responder);
+			if ( (connection as Object).hasOwnProperty("setSavepoint") )
+				connection as Object).setSavepoint(name, responder);
+			else
+				trace("**** warnings: setSavepoint not avaliable for this version of SDK ****");				
 		}
 		
 		/**
@@ -488,7 +491,10 @@ package com.elad.framework.sqlite
 		 */		
 		public function releaseSavepoint(name:String="", responder:Responder=null):void
 		{
-			connection.releaseSavepoint(name, responder);
+			if ( (connection as Object).hasOwnProperty("releaseSavepoint") )
+				(connection as Object).releaseSavepoint(name, responder);
+			else
+				trace("**** warnings: releaseSavepoint not avaliable for this version of SDK ****");
 		}
 		
 		/**
@@ -502,7 +508,10 @@ package com.elad.framework.sqlite
 		 */		
 		public function rollbackToSavepoint(name:String="", responder:Responder=null):void
 		{
-			connection.rollbackToSavepoint(name, responder);
+			if ( (connection as Object).hasOwnProperty("rollbackToSavepoint") )
+				(connection as Object).rollbackToSavepoint(name, responder);
+			else
+				trace("**** warnings: rollbackToSavepoint not avaliable for this version of SDK ****");			
 		}		
 		
 		//--------------------------------------------------------------------------
