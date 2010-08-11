@@ -140,7 +140,9 @@ package com.elad.framework.sqlite
 		// datsbase apis instances
 		protected var _connection:SQLConnection;
 		protected var statement:SQLStatement;
-		protected var sqlFile:File;
+		protected var sqlFile:File= null;
+		private var encryptionKey:ByteArray = null;
+		
 		
 		// repeated sql command
 		protected var repeateFailCallBack:Function;
@@ -194,6 +196,9 @@ package com.elad.framework.sqlite
 		 */		
 		public function get connection():SQLConnection
 		{
+			if ( (sqlFile != null) && !_connection.connected )  
+				_connection.open( sqlFile, SQLMode.CREATE, false, 1024, encryptionKey );
+			
 			return _connection;
 		}		
 		
@@ -221,8 +226,6 @@ package com.elad.framework.sqlite
 			this.selectedTableName = (selectedTableName == "") ? sqliteTables[0].tableName : selectedTableName;
 			this.sqliteTables = sqliteTables;
 			
-			var encryptionKey:ByteArray = null;
-			
 			_connection = new SQLConnection();
 			sqlFile = File.applicationStorageDirectory.resolvePath(dbFullFileName);
 			
@@ -233,7 +236,7 @@ package com.elad.framework.sqlite
 					encryptionKey = getEncryptionKey(password, sqlFile);
 				}
 				
-				connection.open(sqlFile, SQLMode.CREATE, false, 1024, encryptionKey);
+				_connection.open(sqlFile, SQLMode.CREATE, false, 1024, encryptionKey);
 				this.dispatchEvent( new DatabaseSuccessEvent(DatabaseSuccessEvent.DATABASE_CONNECTED_SUCCESSFULLY, "Database connected successfully") );
 			}
 			catch (error:SQLError)
@@ -342,7 +345,7 @@ package com.elad.framework.sqlite
 		{
 			this.selectedTableName = ( selectedTableName != "" ) ? selectedTableName : this.selectedTableName;
 			
-			var sql:String = "DELETE * FROM " + selectedTableName + ";";
+			var sql:String = "DELETE FROM " + selectedTableName + ";";
 			executeCustomCommand(sql, userGestureName, callback, failCallback);
 		}
 		
@@ -475,7 +478,7 @@ package com.elad.framework.sqlite
 		public function setSavepoint(name:String="", responder:Responder=null):void
 		{
 			if ( (connection as Object).hasOwnProperty("setSavepoint") )
-				connection as Object).setSavepoint(name, responder);
+				(connection as Object).setSavepoint(name, responder);
 			else
 				trace("**** warnings: setSavepoint not avaliable for this version of SDK ****");				
 		}
